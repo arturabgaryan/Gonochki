@@ -19,6 +19,21 @@ pygame.display.update()
 
 # здесь определяются константы, классы и функции
 
+class Explosion(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        self.rect = pygame.Rect(x, y, 40, 40)
+        self.images = []
+        self.index = 0
+
+        for i in range(8):
+            image = scale(pygame.image.load(f"tile00{i}.png"), (100, 100))
+            self.images.append(image)
+
+    def draw(self, screen):
+        if self.index < 8:
+            screen.blit(self.images[self.index], (self.rect.x, self.rect.y))
+            self.index += 1
+
 class Bushes(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -63,9 +78,13 @@ class Car(pygame.sprite.Sprite):
         # добавим кораблю здоровье
         self.life = 5
         self.dead = False
+        self.explosions = []
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
+
+        for explosion in self.explosions:
+            explosion.draw(screen)
 
     # добавим группу с астероидами в обновление координат корабля
     def update(self, left, right, up, down, asteroids):
@@ -110,12 +129,16 @@ class Car(pygame.sprite.Sprite):
             elif self.rect.colliderect(asteroid.rect):
                 # уменьшаем жизнь
                 self.life -= 1
+                rx = random.randint(-5, 40)
+                ry = random.randint(-5, 40)
+                explosion = Explosion(self.rect.x + rx, self.rect.y + ry)
+                self.explosions.append(explosion)
                 asteroid.kill()
-
 
 
 car = Car(200, 750,'car.png')
 car2 = Car(643, 750,'car2.png')
+
 left = False
 right = False
 up = False
@@ -124,13 +147,23 @@ left2 = False
 right2 = False
 up2 = False
 down2 = False
+
 asteroids = pygame.sprite.Group()
 # загрузим системный шрифт
 pygame.font.init()
 font = pygame.font.SysFont('Comic Sans MS', 30)
+f =0
+f2 = -1024
 # главный цикл
 while True:
-    screen.blit(bg, (0, 0))
+    screen.blit(bg, (0, f))
+    screen.blit(bg, (0, f2))
+    f += 7
+    f2 += 7
+    if f > 800:
+        f = -1024
+    if f2 > 800:
+        f2 = -1024
     clock.tick(60)
     if random.randint(1, 1000) > 970:
         asteroid_x = random.randint(90, 920)
@@ -196,9 +229,10 @@ while True:
         asteroid.draw(screen)
 
     # выведем жизнь на экран белым цветом
-    life = font.render(f'LIFE: {car.life}', False, (0, 255, 255))
-    life = font.render(f'LIFE2: {car2.life}', False, (0, 255, 255))
+    life = font.render(f'RED_LIFE: {car.life}', False, (0, 255, 255))
+    life2 = font.render(f'BLUE_LIFE: {car2.life}', False, (0, 255, 255))
     screen.blit(life, (20, 20))
+    screen.blit(life2, (880, 20))
     if car.dead == True :
         pygame.quit()
     elif car2.dead == True:
