@@ -3,7 +3,7 @@ import sys
 import random
 from pygame.transform import scale
 sys.path.append("scripts/")
-from objects import Car
+from objects import Car, SecondCar
 
 pygame.init()
 
@@ -20,7 +20,7 @@ road = scale(road, (1280, 1024))
 left = False
 right = False
 
-car = Car(300, 850)
+car, car2 = Car(300, 800), SecondCar(600, 800)
 
 # игровой цикл
 while True:
@@ -45,4 +45,7 @@ while True:
 
     car.update(left, right)
     car.draw(screen)
+
+    car2.update(left, right)
+    car2.draw(screen)
     pygame.display.update()
