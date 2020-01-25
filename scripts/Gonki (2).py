@@ -37,7 +37,7 @@ class Car(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(filename).convert_alpha()
         self.rect = self.image.get_rect(center=(x, 0))
-        
+
 # главный цикл
 while True:
     screen = pygame.display.set_mode((1024, 904))
@@ -54,15 +54,15 @@ while True:
         if i.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-            
+
         keys = pygame.key.get_pressed()
-        
+
         if keys[pygame.K_a]:
             if x <= 104:
                 x += 0
             else:
                 x -= 15
-        
+
         elif keys[pygame.K_d]:
             if x >= 443:
                 x += 0
@@ -79,4 +79,3 @@ while True:
         const += 40
         X = const
     pygame.display.update()
-
