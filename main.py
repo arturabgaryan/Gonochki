@@ -12,10 +12,9 @@ screen = pygame.display.set_mode((1280, 1024))
 
 # указываем название
 pygame.display.set_caption("RaceMode")
-
-road = pygame.image.load("static/img/road.jpg")
 # масштабируем картинку под размер экрана
-road = scale(road, (1280, 1024))
+road = scale(pygame.image.load("static/img/road.jpg"), (1280, 1024))
+menu_bg = scale(pygame.image.load('static/img/menu_bg.jpg'), (1280, 1024))
 
 left = False
 right = False
@@ -25,10 +24,16 @@ right_2 = False
 
 car, car2 = Car(380, 800), SecondCar(780, 800)
 
+def draw_bg():
+    pass
+def printout():
+    print(10000)
 # игровой цикл
+pause = True
 while True:
     # обрабатываем события
-    for e in pygame.event.get():
+    events = pygame.event.get()
+    for e in events:
         if e.type == pygame.KEYDOWN and e.key == pygame.K_a:
             left = True
         if e.type == pygame.KEYDOWN and e.key == pygame.K_d:
@@ -52,18 +57,19 @@ while True:
             # закрыть окно
             raise SystemExit("QUIT")
 
-    screen.blit(road, (0, 0))
 
-    car.update(left, right)
-    car.draw(screen)
+    if pause == False:
+        print(pause)
+        screen.blit(road, (0, 0))
 
-    car2.update(left_2, right_2)
-    car2.draw(screen)
+        car.update(left, right)
+        car.draw(screen)
 
-    def fun():
-        pass
-
-    help_menu = pygameMenu.TextMenu(screen, 1280, 1024, font='static/fonts/Arial.ttf', title='Menu', bgfun=fun())
-    help_menu.add_option('Simple button', fun, align=pygameMenu.locals.ALIGN_LEFT)
-    help_menu.add_option('Return to Menu', pygameMenu.events.MENU_BACK)
-    pygame.display.update()
+        car2.update(left_2, right_2)
+        car2.draw(screen)
+    else:
+        screen.blit(menu_bg, (0, 0))
+        help_menu = pygameMenu.Menu(screen, window_width=1280, window_height=1024, font='static/fonts/Arial.ttf', title='RaceMode', bgfun=draw_bg, color_selected=(255, 255, 255))
+        help_menu.add_option('Simple button', printout, align=pygameMenu.locals.ALIGN_LEFT)
+        help_menu.draw()
+        pygame.display.update()
