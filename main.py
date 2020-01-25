@@ -3,7 +3,7 @@ import sys
 import random
 from pygame.transform import scale
 sys.path.append("scripts/")
-from objects import Car
+from objects import Car, SecondCar
 
 pygame.init()
 
@@ -20,21 +20,32 @@ road = scale(road, (1280, 1024))
 left = False
 right = False
 
-car = Car(300, 850)
+left_2 = False
+right_2 = False
+
+car, car2 = Car(380, 800), SecondCar(780, 800)
 
 # игровой цикл
 while True:
     # обрабатываем события
     for e in pygame.event.get():
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_LEFT:
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_a:
             left = True
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_RIGHT:
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_d:
             right = True
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_LEFT:
+            left_2 = True
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_RIGHT:
+            right_2 = True
 
         # если отпущена клавиша - меняем переменную
         if e.type == pygame.KEYUP and e.key == pygame.K_LEFT:
-            left = False
+            left_2= False
         if e.type == pygame.KEYUP and e.key == pygame.K_RIGHT:
+            right_2 = False
+        if e.type == pygame.KEYUP and e.key == pygame.K_a:
+            left = False
+        if e.type == pygame.KEYUP and e.key == pygame.K_d:
             right = False
         # если нажали на крестик
         if e.type == pygame.QUIT:
@@ -45,4 +56,7 @@ while True:
 
     car.update(left, right)
     car.draw(screen)
+
+    car2.update(left_2, right_2)
+    car2.draw(screen)
     pygame.display.update()
