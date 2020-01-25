@@ -1,4 +1,6 @@
 import pygame
+import sys
+import random
 from pygame.transform import scale
 
 class Car(pygame.sprite.Sprite):
@@ -11,7 +13,7 @@ class Car(pygame.sprite.Sprite):
         self.rect = pygame.Rect(x, y, 50, 100)
 
         # загружаем картинку с кораблем
-        self.image = scale(pygame.image.load("static/img/car.png"), (70, 130))
+        self.image = scale(pygame.image.load("static/img/car.png"), (100, 170))
 
         # задаем начальную скорость по оси x
         self.xvel = 0
@@ -25,10 +27,10 @@ class Car(pygame.sprite.Sprite):
     def update(self, left, right):
         # если нажата клавиша влево, уменьшаем скорость
         if left:
-            self.xvel -= 3
+            self.xvel -= 6
         # если нажата клавиша вправо, увеличиваем скорость
         if right:
-            self.xvel += 3
+            self.xvel += 6
         # если ничего не нажато - тормозим
         if not (left or right):
             self.xvel = 0
