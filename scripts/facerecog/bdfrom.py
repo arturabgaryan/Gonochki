@@ -66,7 +66,8 @@ def rec_faces(dir_name):
         rgb_small_frame = small_frame[:, :, ::-1]
 
         face_locations = face_recognition.face_locations(rgb_small_frame)
-        face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+        face_encodings = face_recognition.face_encodings(
+            rgb_small_frame, face_locations)
 
         face_labels = []
         for face_location, face_encoding in zip(face_locations, face_encodings):
@@ -76,7 +77,7 @@ def rec_faces(dir_name):
             face_image = cv2.resize(face_image, (150, 150))
             face_imageL.append(face_image)
 
-        status = int((i/len(listdir(getcwd() + '/' + dir_name)))*100)
+        status = int((i / len(listdir(getcwd() + '/' + dir_name))) * 100)
         if status % 5 == 0 and s != status:
             s = status
             print(status)
@@ -88,6 +89,19 @@ def rec_faces(dir_name):
     return face_encoding, face_encodingL, face_imageL
 
 
+def addbd(username, data_path, video_path, dir_name='videoframes'):
+    splitvideo(dir_name, video_path)
+    face_encoding, face_encodings, face_imageL = rec_faces(dir_name)
+    load_known_faces(data_path)
+    face_distances = face_recognition.face_distance(
+        face_encodings, face_encoding)
+    best_match_index = np.argmin(face_distances)
+    register_new_face(face_encoding, face_imageL[best_match_index], username)
+    save_known_faces(data_path)
+    cmd = f'rm -rf {dir_name}'
+    system(cmd)
+    return 'ok'
+
 
 if __name__ == "__main__":
     dir_name = 'videoframes'
@@ -97,9 +111,11 @@ if __name__ == "__main__":
     splitvideo(dir_name, video_name)
     face_encoding, face_encodings, face_imageL = rec_faces(dir_name)
     load_known_faces(dataname)
-    face_distances = face_recognition.face_distance(face_encodings, face_encoding)
+    face_distances = face_recognition.face_distance(
+        face_encodings, face_encoding)
     best_match_index = np.argmin(face_distances)
     register_new_face(face_encoding, face_imageL[best_match_index], name)
     save_known_faces(dataname)
+    cmd = f'rm -rf {dir_name}'
+    system(cmd)
     print('ок')
-    
