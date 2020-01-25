@@ -26,6 +26,7 @@ while True:
         if e.type == pygame.QUIT:
             # закрыть окно
             raise SystemExit("QUIT")
-    car.draw(screen)
+
     screen.blit(road, (0, 0))
+    car.draw(screen)
     pygame.display.update()

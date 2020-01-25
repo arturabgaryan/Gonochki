@@ -11,7 +11,7 @@ class Car(pygame.sprite.Sprite):
         self.rect = pygame.Rect(x, y, 50, 100)
 
         # загружаем картинку с кораблем
-        self.image = scale(pygame.image.load("static/img/ship.png"), (50, 100))
+        self.image = scale(pygame.image.load("static/img/car.png"), (70, 130))
 
         # задаем начальную скорость по оси x
         self.xvel = 0
