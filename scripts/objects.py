@@ -3,6 +3,7 @@ import sys
 import random
 from pygame.transform import scale
 
+
 class Car(pygame.sprite.Sprite):
     # конструктор - функция, в которую мы передаем начальные координаты
     def __init__(self, x, y):
@@ -37,6 +38,7 @@ class Car(pygame.sprite.Sprite):
         # изменяем координаты на скорость
         self.rect.x += self.xvel
 
+
 class SecondCar(pygame.sprite.Sprite):
     # конструктор - функция, в которую мы передаем начальные координаты
     def __init__(self, x, y):
@@ -47,7 +49,8 @@ class SecondCar(pygame.sprite.Sprite):
         self.rect = pygame.Rect(x, y, 50, 100)
 
         # загружаем картинку с кораблем
-        self.image = scale(pygame.image.load("static/img/car2.png"), (100, 170))
+        self.image = scale(pygame.image.load(
+            "static/img/car2.png"), (100, 170))
 
         # задаем начальную скорость по оси x
         self.xvel = 0

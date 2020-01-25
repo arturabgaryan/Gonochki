@@ -18,15 +18,6 @@ clock = pygame.time.Clock()
 pygame.display.update()
 
 # здесь определяются константы, классы и функции
-x = 200
-X = 200
-Y = -40
-road_x = 250
-BLUE = (0, 70, 225)
-COL = (123, 42, 63)
-counter = 1
-const = 200
-FPS = 120
 
 class Bushes(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -63,14 +54,14 @@ class Lines(pygame.sprite.Sprite):
             self.kill()
 
 class Car(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y,img):
         pygame.sprite.Sprite.__init__(self)
         self.rect = pygame.Rect(x, y, 50, 100)
-        self.image = scale(pygame.image.load("car.png"), (50, 100))
+        self.image = scale(pygame.image.load(img), (50, 100))
         self.xvel = 0
         self.yvel = 0
         # добавим кораблю здоровье
-        self.life = 1
+        self.life = 5
         self.dead = False
 
     def draw(self, screen):
@@ -85,7 +76,7 @@ class Car(pygame.sprite.Sprite):
                 self.xvel = -5
 
         if right:
-            if self.rect.x > 433:
+            if self.rect.x > 933:
                 self.xvel = 0
             else:
                 self.xvel = 5
@@ -119,13 +110,20 @@ class Car(pygame.sprite.Sprite):
             elif self.rect.colliderect(asteroid.rect):
                 # уменьшаем жизнь
                 self.life -= 1
+                asteroid.kill()
 
 
-car = Car(200, 750)
+
+car = Car(200, 750,'car.png')
+car2 = Car(643, 750,'car2.png')
 left = False
 right = False
 up = False
 down = False
+left2 = False
+right2 = False
+up2 = False
+down2 = False
 asteroids = pygame.sprite.Group()
 # загрузим системный шрифт
 pygame.font.init()
@@ -135,7 +133,7 @@ while True:
     screen.blit(bg, (0, 0))
     clock.tick(60)
     if random.randint(1, 1000) > 970:
-        asteroid_x = random.randint(90, 420)
+        asteroid_x = random.randint(90, 920)
         asteroid_y = -100
         asteroid = Bushes(asteroid_x, asteroid_y)
         asteroids.add(asteroid)
@@ -153,6 +151,19 @@ while True:
             down = True
             up = False
 
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_LEFT:
+            left2 = True
+            right2 = False
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_RIGHT:
+            right2 = True
+            left2 = False
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_UP:
+            up2 = True
+            down2 = False
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_DOWN:
+            down2 = True
+            up2 = False
+
         if e.type == pygame.KEYUP and e.key == pygame.K_a:
             left = False
         if e.type == pygame.KEYUP and e.key == pygame.K_d:
@@ -161,12 +172,24 @@ while True:
             up = False
         if e.type == pygame.KEYUP and e.key == pygame.K_s:
             down = False
+
+        if e.type == pygame.KEYUP and e.key == pygame.K_LEFT:
+            left2 = False
+        if e.type == pygame.KEYUP and e.key == pygame.K_RIGHT:
+            right2 = False
+        if e.type == pygame.KEYUP and e.key == pygame.K_UP:
+            up2 = False
+        if e.type == pygame.KEYUP and e.key == pygame.K_DOWN:
+            down2 = False
+
         elif e.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
 
     car.update(left, right, up, down, asteroids)
     car.draw(screen)
+    car2.update(left2, right2, up2, down2, asteroids)
+    car2.draw(screen)
 
     for asteroid in asteroids:
         asteroid.update()
@@ -174,5 +197,11 @@ while True:
 
     # выведем жизнь на экран белым цветом
     life = font.render(f'LIFE: {car.life}', False, (0, 255, 255))
+    life = font.render(f'LIFE2: {car2.life}', False, (0, 255, 255))
     screen.blit(life, (20, 20))
+    if car.dead == True :
+        pygame.quit()
+    elif car2.dead == True:
+        pygame.quit()
+
     pygame.display.update()
