@@ -3,8 +3,8 @@ import sys
 import random
 from pygame.transform import scale
 sys.path.append("scripts/")
-
 from objects import Car
+
 pygame.init()
 
 # создаем окно размера 800 на 600
