@@ -24,38 +24,55 @@ right_2 = False
 
 car, car2 = Car(380, 800), SecondCar(780, 800)
 
+
 def draw_bg():
     pass
+
+
 def printout():
-    print(10000)
+    global pause
+    print(44)
+    pause = False
+
+
 # игровой цикл
 pause = True
+in_game = False
+
+help_menu = pygameMenu.TextMenu(screen, window_width=1280, window_height=1024, font='static/fonts/Arial.ttf', title='RaceMode', bgfun=draw_bg, color_selected=(255, 255, 255), draw_select=True)
+
+help_menu.add_option('Start', pygameMenu.events.CLOSE)
+help_menu.add_option('Exit', pygameMenu.events.EXIT)
+
 while True:
     # обрабатываем события
     events = pygame.event.get()
     for e in events:
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_a:
-            left = True
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_d:
-            right = True
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_LEFT:
-            left_2 = True
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_RIGHT:
-            right_2 = True
-
-        # если отпущена клавиша - меняем переменную
-        if e.type == pygame.KEYUP and e.key == pygame.K_LEFT:
-            left_2 = False
-        if e.type == pygame.KEYUP and e.key == pygame.K_RIGHT:
-            right_2 = False
-        if e.type == pygame.KEYUP and e.key == pygame.K_a:
-            left = False
-        if e.type == pygame.KEYUP and e.key == pygame.K_d:
-            right = False
-        # если нажали на крестик
         if e.type == pygame.QUIT:
             # закрыть окно
             raise SystemExit("QUIT")
+        else:
+            if e.type == pygame.KEYDOWN and e.key == pygame.K_a:
+                left = True
+            if e.type == pygame.KEYDOWN and e.key == pygame.K_d:
+                right = True
+            if e.type == pygame.KEYDOWN and e.key == pygame.K_LEFT:
+                left_2 = True
+            if e.type == pygame.KEYDOWN and e.key == pygame.K_RIGHT:
+                right_2 = True
+
+            # если отпущена клавиша - меняем переменную
+            if e.type == pygame.KEYUP and e.key == pygame.K_LEFT:
+                left_2 = False
+            if e.type == pygame.KEYUP and e.key == pygame.K_RIGHT:
+                right_2 = False
+            if e.type == pygame.KEYUP and e.key == pygame.K_a:
+                left = False
+            if e.type == pygame.KEYUP and e.key == pygame.K_d:
+                right = False
+
+
+        # если нажали на крестик
 
 
     if pause == False:
@@ -69,7 +86,6 @@ while True:
         car2.draw(screen)
     else:
         screen.blit(menu_bg, (0, 0))
-        help_menu = pygameMenu.Menu(screen, window_width=1280, window_height=1024, font='static/fonts/Arial.ttf', title='RaceMode', bgfun=draw_bg, color_selected=(255, 255, 255))
-        help_menu.add_option('Simple button', printout, align=pygameMenu.locals.ALIGN_LEFT)
         help_menu.draw()
-        pygame.display.update()
+        print(help_menu.is_disabled())
+    pygame.display.update()
