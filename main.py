@@ -1,10 +1,10 @@
 import pygame
 import sys
 import random
+import pygameMenu
 from pygame.transform import scale
 sys.path.append("scripts/")
 from objects import Car, SecondCar
-
 pygame.init()
 
 # создаем окно размера 800 на 600
@@ -40,7 +40,7 @@ while True:
 
         # если отпущена клавиша - меняем переменную
         if e.type == pygame.KEYUP and e.key == pygame.K_LEFT:
-            left_2= False
+            left_2 = False
         if e.type == pygame.KEYUP and e.key == pygame.K_RIGHT:
             right_2 = False
         if e.type == pygame.KEYUP and e.key == pygame.K_a:
@@ -59,4 +59,11 @@ while True:
 
     car2.update(left_2, right_2)
     car2.draw(screen)
+
+    def fun():
+        pass
+
+    help_menu = pygameMenu.TextMenu(screen, 1280, 1024, font='static/fonts/Arial.ttf', title='Menu', bgfun=fun())
+    help_menu.add_option('Simple button', fun, align=pygameMenu.locals.ALIGN_LEFT)
+    help_menu.add_option('Return to Menu', pygameMenu.events.MENU_BACK)
     pygame.display.update()
