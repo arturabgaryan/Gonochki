@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[61]:
-
-
 import pygame
 import sys
 import random
@@ -11,7 +5,7 @@ import random
 pygame.init()
 
 screen = pygame.display.set_mode((1024, 904))
-bg = pygame.image.load('doroga1.jpg')
+bg = pygame.image.load('static/дорога.jpg')
 screen.blit(bg, (0, 0))
 #фон
 
@@ -41,7 +35,7 @@ class Car(pygame.sprite.Sprite):
 # главный цикл
 while True:
     screen = pygame.display.set_mode((1024, 904))
-    bg = pygame.image.load('doroga1.jpg')
+    bg = pygame.image.load('static/дорога.jpg')
     screen.blit(bg, (0, 0))
     clock.tick(FPS)
     pygame.draw.circle(screen, BLUE, (x, 700), 40)
