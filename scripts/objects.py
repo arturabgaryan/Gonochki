@@ -8,8 +8,8 @@ from pygame.transform import scale
 class Car(pygame.sprite.Sprite):
     def __init__(self, x, y,img):
         pygame.sprite.Sprite.__init__(self)
-        self.img_car = [pygame.image.load(img).convert_alpha(),pygame.image.load('../static/ar_left.png').convert_alpha(),pygame.image.load('../static/car_right.png').convert_alpha()]
-        self.img_car2 = [pygame.image.load(img).convert_alpha(), pygame.image.load('../static/car2_left.png').convert_alpha(), pygame.image.load('../static/car2_right.png').convert_alpha()]
+        self.img_car = [pygame.image.load(img).convert_alpha(),pygame.image.load('static/img/car_left.png').convert_alpha(),pygame.image.load('static/img/car_right.png').convert_alpha()]
+        self.img_car2 = [pygame.image.load(img).convert_alpha(), pygame.image.load('static/img/car2_left.png').convert_alpha(), pygame.image.load('static/img/car2_right.png').convert_alpha()]
         self.rect = pygame.Rect(x, y, 50, 100)
         self.image = scale(pygame.image.load(img).convert_alpha(), (50, 100)).convert_alpha()
         self.xvel = 0
@@ -25,16 +25,17 @@ class Car(pygame.sprite.Sprite):
         for explosion in self.explosions:
             explosion.draw(screen)
 
-    def update(self, left, right, up, down, asteroids):
+    def update(self, left, right, up, down, asteroids, coins, type_car):
         if left:
             if self.rect.x < 80:
-                if self == car:
+
+                if type_car == 0:
                     self.image = scale(self.img_car[0], (50, 100))
                 else:
                     self.image = scale(self.img_car2[0], (50, 100))
                 self.xvel = 0
             else:
-                if self == car:
+                if type_car == 0:
                     self.image = scale(self.img_car[1], (50, 100))
                 else:
                     self.image = scale(self.img_car2[1], (50, 100))
@@ -42,13 +43,13 @@ class Car(pygame.sprite.Sprite):
 
         if right:
             if self.rect.x > 933:
-                if self == car:
+                if type_car == 0:
                     self.image = scale(self.img_car[0], (50, 100))
                 else:
                     self.image = scale(self.img_car2[0], (50, 100))
                 self.xvel = 0
             else:
-                if self == car:
+                if type_car == 0:
                     self.image = scale(self.img_car[2], (50, 100))
                 else:
                     self.image = scale(self.img_car2[2], (50, 100))
@@ -68,7 +69,7 @@ class Car(pygame.sprite.Sprite):
 
         if not (left or right or up or down):
             self.xvel = 0
-            if self == car:
+            if type_car == 0:
                 self.image = scale(self.img_car[0], (50, 100))
             else:
                 self.image = scale(self.img_car2[0], (50, 100))
@@ -79,7 +80,7 @@ class Car(pygame.sprite.Sprite):
         self.rect.x += self.xvel
         self.rect.y += self.yvel
 
-        for block in blocks:
+        for block in asteroids:
             if self.life == 0:
                 self.dead = True
             elif self.rect.colliderect(block.rect):
@@ -97,14 +98,14 @@ class Car(pygame.sprite.Sprite):
 class Coins(pygame.sprite.Sprite):
      def __init__(self,x,y,speed):
          pygame.sprite.Sprite.__init__(self)
-         self.image = scale(pygame.image.load('../static/coin.png').convert_alpha(),(50, 50))
+         self.image = scale(pygame.image.load('static/img/coin.png').convert_alpha(),(50, 50))
          self.rect = pygame.Rect(x, y, 50, 50)
          self.yvel = speed
 
      def draw(self, screen):
          screen.blit(self.image, (self.rect.x, self.rect.y))
 
-     def update(self):
+     def update(self, blocks):
          self.rect.y += self.yvel
 
          if self.rect.y > 900:
@@ -121,7 +122,7 @@ class Explosion(pygame.sprite.Sprite):
         self.index = 0
 
         for i in range(8):
-            image = scale(pygame.image.load(f"../static/tile00{i}.png").convert_alpha(), (100, 100))
+            image = scale(pygame.image.load(f"static/img/tile00{i}.png").convert_alpha(), (100, 100))
             self.images.append(image)
 
     def draw(self, screen):
@@ -133,9 +134,9 @@ class Explosion(pygame.sprite.Sprite):
 class Bushes(pygame.sprite.Sprite):
     def __init__(self, x, y, speed):
         pygame.sprite.Sprite.__init__(self)
-        img1 = scale(pygame.image.load("../static/rock.png").convert_alpha(), (50, 100))
-        img2 = scale(pygame.image.load("../static/bush.png").convert_alpha(), (50, 100))
-        img3 = scale(pygame.image.load("../static/box.png").convert_alpha(), (50, 100))
+        img1 = scale(pygame.image.load("static/img/rock.png").convert_alpha(), (50, 100))
+        img2 = scale(pygame.image.load("static/img/bush.png").convert_alpha(), (50, 100))
+        img3 = scale(pygame.image.load("static/img/box.png").convert_alpha(), (50, 100))
         imgs = [img1, img2,img3]
         self.image = scale(random.choice(imgs), (50, 50))
         self.rect = pygame.Rect(x, y, 50, 50)

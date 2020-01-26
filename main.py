@@ -7,14 +7,14 @@ sys.path.append('scripts/')
 from objects import Car, Coins, Explosion, Bushes
 pygame.init()
 # фон
-gameover = scale(pygame.image.load('../static/Game_over.jpg'),(1024,904))
+gameover = scale(pygame.image.load('static/img/gameover.jpg'),(1024,904))
 screen = pygame.display.set_mode((1024, 904))
-bg = pygame.image.load('doroga1.jpg').convert_alpha()
+bg = pygame.image.load('static/img/дорога.jpg').convert_alpha()
 screen.blit(bg, (0, 0))
 screen.set_alpha(None)
 
 # иконка
-img = pygame.image.load('car.png').convert_alpha()
+img = pygame.image.load('static/img/car.png').convert_alpha()
 pygame.display.set_icon(img)
 
 # fps
@@ -23,8 +23,8 @@ pygame.display.update()
 
 # здесь определяются константы, классы и функции
 x = 5
-car = Car(200, 750, '../static/car.png')
-car2 = Car(643, 750, '../static/car2.png')
+car = Car(200, 750, 'static/img/car.png')
+car2 = Car(643, 750, 'static/img/car2.png')
 speed = 10
 left = False
 right = False
@@ -113,11 +113,11 @@ while True:
 
     if not car.dead:
         car.score += 1
-        car.update(left, right, up, down, blocks)
+        car.update(left, right, up, down, blocks, coins, type_car=0)
         car.draw(screen)
     if not car2.dead:
         car2.score += 1
-        car2.update(left2, right2, up2, down2, blocks)
+        car2.update(left2, right2, up2, down2, blocks, coins, type_car=1)
         car2.draw(screen)
 
     for block in blocks:
@@ -125,7 +125,7 @@ while True:
         block.draw(screen)
 
     for coin in coins:
-        coin.update()
+        coin.update(blocks)
         coin.draw(screen)
 
     life = font.render(f'RED_LIFE: {car.life}', False, (0, 255, 255))
