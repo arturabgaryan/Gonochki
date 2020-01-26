@@ -4,14 +4,14 @@ import random
 import time
 from pygame.transform import scale
 
-#меню
+#menu
 pygame.font.init()
 window = pygame.display.set_mode((1280, 1024))
 pygame.display.set_caption('SPIdRACe')
 menu = pygame.Surface((1280, 1024))
 screen = pygame.Surface((1280, 1024))
 img = pygame.image.load('car.png').convert_alpha()
-menu_img = scale(pygame.image.load('menu_bg.jpg').convert_alpha(),(1280,1024))
+menu_img = scale(pygame.image.load('background.png').convert_alpha(),(1280,1024))
 pygame.display.set_icon(img)
 
 
@@ -69,27 +69,27 @@ class Menu:
             pygame.time.delay(5)
 
 
-punkts = [(450, 400, u'Play', (11, 0, 77), (250, 250, 30), 0, (None, 200)),
-          (450, 600, u'Exit', (11, 0, 77), (250, 250, 30), 1, (None, 200))]
+punkts = [(450, 200, u'Play', (11, 0, 77), (250, 250, 30), 0, (None, 200)),
+          (450, 400, u'Exit', (11, 0, 77), (250, 250, 30), 1, (None, 200))]
 captions = [(360, 100, u'Race Runner 2020', (11, 0, 77), (250, 250, 30), 0, (None,100))]
 game = Menu(captions, punkts)
 game.menu()
 #-----------------------------------------------------------------------------------------------------------------------
-#игра
+#game
 
 pygame.init()
-# фон
+# background
 gameover = scale(pygame.image.load('Game_over.jpg'),(1280,1024))
 screen = pygame.display.set_mode((1280,1024))
 bg =scale(pygame.image.load('doroga1.jpg').convert_alpha(),(1280,1024))
 screen.blit(bg, (0, 0))
 screen.set_alpha(None)
 
-# иконка
+# icon
 img = pygame.image.load('car.png').convert_alpha()
 pygame.display.set_icon(img)
 
-#картинки
+#pictures
 img_rock = scale(pygame.image.load("rock.png").convert_alpha(),(100,200))
 img_bush = scale(pygame.image.load("bush.png").convert_alpha(),(100,200))
 img_box = scale(pygame.image.load("box.png").convert_alpha(),(100,200))
@@ -102,7 +102,7 @@ pygame.display.update()
 pygame.mixer.music.load('music.wav')
 pygame.mixer.music.play(-1)
 
-# здесь определяются константы, классы и функции
+# constants classes and functions
 class Coins(pygame.sprite.Sprite):
      def __init__(self,x,y,speed):
          pygame.sprite.Sprite.__init__(self)
@@ -132,7 +132,7 @@ class Explosion(pygame.sprite.Sprite):
         self.index = 0
 
         for i in range(8):
-            image = scale(pygame.image.load(f"tile00{i}.png").convert_alpha(), (100, 100))
+            image = scale(pygame.image.load("tile00{}.png".format(i)).convert_alpha(), (100, 100))
             self.images.append(image)
 
     def draw(self, screen):
@@ -267,6 +267,8 @@ pygame.font.init()
 font = pygame.font.SysFont('Comic Sans MS', 30)
 f =0
 f2 = -1024
+
+# main game
 while True:
     clock.tick(60)
     screen.blit(bg, (0, f))
