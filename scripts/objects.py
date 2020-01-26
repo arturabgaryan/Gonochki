@@ -130,7 +130,6 @@ class Explosion(pygame.sprite.Sprite):
             screen.blit(self.images[self.index], (self.rect.x, self.rect.y))
             self.index += 1
 
-
 class Bushes(pygame.sprite.Sprite):
     def __init__(self, x, y, speed):
         pygame.sprite.Sprite.__init__(self)

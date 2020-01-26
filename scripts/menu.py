@@ -9,9 +9,11 @@ screen = pygame.Surface((1280, 1024))
 
 
 class Menu:
-    def __init__(self, captions, punkts=[(400, 350, u'Punkt', (250, 250, 30), (250, 30, 250))]):
-        self.captions = captions
-        self.punkts = punkts
+    def __init__(self):
+        self.captions = [(420, 100, u'Menu', (11, 0, 77), (250, 250, 30), 0, (None, 100))]
+        self.punkts = [(420, 250, u'Play', (11, 0, 77), (250, 250, 30), 0, (None, 300)),
+                  (420, 450, u'Exit', (11, 0, 77), (250, 250, 30), 1, (None, 300))]
+
 
     def render(self, poverhnost, num_punkt, p):
         punkts = p
@@ -62,8 +64,6 @@ class Menu:
             pygame.time.delay(5)
 
 
-punkts = [(420, 250, u'Play', (11, 0, 77), (250, 250, 30), 0, (None, 300)),
-          (420, 450, u'Exit', (11, 0, 77), (250, 250, 30), 1, (None, 300))]
-captions = [(420, 100, u'Menu', (11, 0, 77), (250, 250, 30), 0, (None, 100))]
-game = Menu(captions, punkts)
+
+game = Menu()
 game.menu()

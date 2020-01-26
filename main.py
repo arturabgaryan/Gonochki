@@ -4,14 +4,31 @@ import random
 import time
 from pygame.transform import scale
 sys.path.append('scripts/')
+from menu import Menu
 from objects import Car, Coins, Explosion, Bushes
+
+
 pygame.init()
+pygame.font.init()
+pygame.display.init()
+window = pygame.display.set_mode((1280, 1024))
+pygame.display.set_caption('Archer')
+menu = pygame.Surface((1280, 1024))
+
+
+game = Menu()
+game.menu()
+
+
+
 # фон
-gameover = scale(pygame.image.load('static/img/gameover.jpg'),(1024,904))
-screen = pygame.display.set_mode((1024, 904))
-bg = pygame.image.load('static/img/дорога.jpg').convert_alpha()
+gameover = scale(pygame.image.load('static/img/gameover.jpg'),(1280, 1024))
+screen = pygame.display.set_mode((1280, 1024))
+bg = scale(pygame.image.load('static/img/дорога.jpg').convert_alpha(), (1280, 1024))
 screen.blit(bg, (0, 0))
 screen.set_alpha(None)
+
+
 
 # иконка
 img = pygame.image.load('static/img/car.png').convert_alpha()
@@ -40,6 +57,9 @@ pygame.font.init()
 font = pygame.font.SysFont('Comic Sans MS', 30)
 f = 0
 f2 = -1024
+
+paused = True
+
 while True:
     screen.blit(bg, (0, f))
     screen.blit(bg, (0, f2))
