@@ -357,10 +357,10 @@ while True:
         coin.update()
         coin.draw(screen)
 
-    life = font.render(f'RED_LIFE: {car.life}', False, (0, 255, 255))
-    life2 = font.render(f'BLUE_LIFE: {car2.life}', False, (0, 255, 255))
-    score = font.render(f'RED_SCORE: {car.score}', False, (0, 255, 255))
-    score2 = font.render(f'BLUE_SCORE: {car2.score}', False, (0, 255, 255))
+    life = font.render('RED_LIFE: {}'.format(car.life), False, (0, 255, 255))
+    life2 = font.render('BLUE_LIFE: {}'.format(car2.life), False, (0, 255, 255))
+    score = font.render('RED_SCORE: {}'.format(car.score), False, (0, 255, 255))
+    score2 = font.render('BLUE_SCORE: {}'.format(car2.score), False, (0, 255, 255))
 
     if car.dead and car2.dead:
         screen.blit(gameover,(0,0))
