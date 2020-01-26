@@ -171,6 +171,7 @@ def savedata(data, filename):
 
 
 while True:
+    d = {}
     screen.blit(bg, (0, f))
     screen.blit(bg, (0, f2))
     f += 7
