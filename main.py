@@ -39,7 +39,7 @@ def printout():
 pause = True
 in_game = False
 
-help_menu = pygameMenu.TextMenu(screen, window_width=1280, window_height=1024, font='static/fonts/Arial.ttf', title='RaceMode', bgfun=draw_bg, color_selected=(255, 255, 255), draw_select=True)
+help_menu = pygameMenu.Menu(screen, window_width=1280, window_height=1024, font='static/fonts/Arial.ttf', title='RaceMode', bgfun=draw_bg, color_selected=(255, 255, 255))
 
 help_menu.add_option('Start', pygameMenu.events.CLOSE)
 help_menu.add_option('Exit', pygameMenu.events.EXIT)
