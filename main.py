@@ -28,7 +28,7 @@ class Explosion(pygame.sprite.Sprite):
         self.index = 0
 
         for i in range(8):
-            image = scale(pygame.image.load(f"tile00{i}.png"), (100, 100))
+            image = scale(pygame.image.load(f"static/img/tile00{i}.png"), (100, 100))
             self.images.append(image)
 
     def draw(self, screen):
@@ -65,7 +65,7 @@ class Car(pygame.sprite.Sprite):
         self.image = scale(pygame.image.load(img), (50, 100))
         self.xvel = 0
         self.yvel = 0
-        self.life = 1
+        self.life = 5
         self.dead = False
         self.score = 0
         self.explosions = []
@@ -79,14 +79,30 @@ class Car(pygame.sprite.Sprite):
     def update(self, left, right, up, down, asteroids):
         if left:
             if self.rect.x < 80:
+                if self == car:
+                    self.image = scale(pygame.image.load('static/img/car.png'), (50, 100))
+                else:
+                    self.image = scale(pygame.image.load('static/img/car2.png'), (50, 100))
                 self.xvel = 0
             else:
+                if self == car:
+                    self.image = scale(pygame.image.load('static/img/car_left.png'), (50, 100))
+                else:
+                    self.image = scale(pygame.image.load('static/img/car2_left.png'), (50, 100))
                 self.xvel = -5
 
         if right:
             if self.rect.x > 933:
+                if self == car:
+                    self.image = scale(pygame.image.load('static/img/car.png'), (50, 100))
+                else:
+                    self.image = scale(pygame.image.load('static/img/car2.png'), (50, 100))
                 self.xvel = 0
             else:
+                if self == car:
+                    self.image = scale(pygame.image.load('static/img/car_right.png'), (50, 100))
+                else:
+                    self.image = scale(pygame.image.load('static/img/car2_right.png'), (50, 100))
                 self.xvel = 5
 
         if up:
@@ -103,6 +119,10 @@ class Car(pygame.sprite.Sprite):
 
         if not (left or right or up or down):
             self.xvel = 0
+            if self == car:
+                self.image = scale(pygame.image.load('static/img/car.png'), (50, 100))
+            else:
+                self.image = scale(pygame.image.load('static/img/car2.png'), (50, 100))
             if self.rect.y > 703:
                 self.yvel = 0
             else:
