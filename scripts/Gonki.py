@@ -2,15 +2,17 @@ import pygame
 import sys
 import random
 from pygame.transform import scale
+import pandas as pd
+import pickle
 
 pygame.init()
 # фон
 screen = pygame.display.set_mode((1024, 904))
-bg = pygame.image.load('Doroga2.jpg')
+bg = pygame.image.load('/Users/tikhon/Desktop/Gonochki/static/img/дорога.jpg')
 screen.blit(bg, (0, 0))
 
 # иконка
-img = pygame.image.load('car_icon.jpg')
+img = pygame.image.load('/Users/tikhon/Desktop/Gonochki/static/img/car.png')
 pygame.display.set_icon(img)
 
 # fps
@@ -19,11 +21,28 @@ pygame.display.update()
 
 # здесь определяются константы, классы и функции
 
+class Explosion(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        self.rect = pygame.Rect(x, y, 40, 40)
+        self.images = []
+        self.index = 0
+
+        for i in range(8):
+            image = scale(pygame.image.load(f"tile00{i}.png"), (100, 100))
+            self.images.append(image)
+
+    def draw(self, screen):
+        if self.index < 8:
+            screen.blit(self.images[self.index], (self.rect.x, self.rect.y))
+            self.index += 1
+
 class Bushes(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        img1 = scale(pygame.image.load("rock.png"), (50, 100))
-        img2 = scale(pygame.image.load("bush.png"), (50, 100))
+        img1 = scale(pygame.image.load(
+            "/Users/tikhon/Desktop/Gonochki/static/img/rock.png"), (50, 100))
+        img2 = scale(pygame.image.load(
+            "/Users/tikhon/Desktop/Gonochki/static/img/bush.png"), (50, 100))
         imgs = [img1, img2]
         self.image = scale(random.choice(imgs), (50, 50))
         self.rect = pygame.Rect(x, y, 50, 50)
@@ -37,6 +56,7 @@ class Bushes(pygame.sprite.Sprite):
 
         if self.rect.y > 900:
             self.kill()
+
 
 class Lines(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -53,8 +73,9 @@ class Lines(pygame.sprite.Sprite):
         if self.rect.y > 1000:
             self.kill()
 
+
 class Car(pygame.sprite.Sprite):
-    def __init__(self, x, y,img):
+    def __init__(self, x, y, img):
         pygame.sprite.Sprite.__init__(self)
         self.rect = pygame.Rect(x, y, 50, 100)
         self.image = scale(pygame.image.load(img), (50, 100))
@@ -63,9 +84,13 @@ class Car(pygame.sprite.Sprite):
         # добавим кораблю здоровье
         self.life = 5
         self.dead = False
+        self.explosions = []
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
+
+        for explosion in self.explosions:
+            explosion.draw(screen)
 
     # добавим группу с астероидами в обновление координат корабля
     def update(self, left, right, up, down, asteroids):
@@ -110,12 +135,16 @@ class Car(pygame.sprite.Sprite):
             elif self.rect.colliderect(asteroid.rect):
                 # уменьшаем жизнь
                 self.life -= 1
+                rx = random.randint(-5, 40)
+                ry = random.randint(-5, 40)
+                explosion = Explosion(self.rect.x + rx, self.rect.y + ry)
+                self.explosions.append(explosion)
                 asteroid.kill()
-
 
 
 car = Car(200, 750,'car.png')
 car2 = Car(643, 750,'car2.png')
+
 left = False
 right = False
 up = False
@@ -124,68 +153,118 @@ left2 = False
 right2 = False
 up2 = False
 down2 = False
+
 asteroids = pygame.sprite.Group()
 # загрузим системный шрифт
 pygame.font.init()
 font = pygame.font.SysFont('Comic Sans MS', 30)
+f =0
+f2 = -1024
 # главный цикл
+
+data = []
+
+
+def savedata(data, filename):
+    with open(filename, "wb") as f:
+        pickle.dump(data, f)
+
+
 while True:
-    screen.blit(bg, (0, 0))
+    d = {}
+    screen.blit(bg, (0, f))
+    screen.blit(bg, (0, f2))
+    f += 7
+    f2 += 7
+    if f > 800:
+        f = -1024
+    if f2 > 800:
+        f2 = -1024
     clock.tick(60)
     if random.randint(1, 1000) > 970:
         asteroid_x = random.randint(90, 920)
         asteroid_y = -100
         asteroid = Bushes(asteroid_x, asteroid_y)
         asteroids.add(asteroid)
+
+    i = 0
+    for asteroid in asteroids:
+        d[str(i)] = {"x": asteroid.rect.x, "y": asteroid.rect.y}
+        i += 1
+    d["car"] = {"x": car.rect.x, "y": car.rect.y}
+
     for e in pygame.event.get():
         if e.type == pygame.KEYDOWN and e.key == pygame.K_a:
+            d['act'] = {'k': 'a', 'act': 1}
             left = True
             right = False
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_d:
+        elif e.type == pygame.KEYDOWN and e.key == pygame.K_d:
+            d['act'] = {'k': 'd', 'act': 1}
             right = True
             left = False
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_w:
+        elif e.type == pygame.KEYDOWN and e.key == pygame.K_w:
+            d['act'] = {'k': 'w', 'act': 1}
             up = True
             down = False
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_s:
+        elif e.type == pygame.KEYDOWN and e.key == pygame.K_s:
+            d['act'] = {'k': 's', 'act': 1}
             down = True
             up = False
 
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_LEFT:
+        elif e.type == pygame.KEYDOWN and e.key == pygame.K_LEFT:
+            d['act'] = {'k': 'LEFT', 'act': 1}
             left2 = True
             right2 = False
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_RIGHT:
+        elif e.type == pygame.KEYDOWN and e.key == pygame.K_RIGHT:
+            d['act'] = {'k': 'RIGHT', 'act': 1}
             right2 = True
             left2 = False
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_UP:
+        elif e.type == pygame.KEYDOWN and e.key == pygame.K_UP:
+            d['act'] = {'k': 'UP', 'act': 1}
             up2 = True
             down2 = False
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_DOWN:
+        elif e.type == pygame.KEYDOWN and e.key == pygame.K_DOWN:
+            d['act'] = {'k': 'DOWN', 'act': 1}
             down2 = True
             up2 = False
 
-        if e.type == pygame.KEYUP and e.key == pygame.K_a:
+        elif e.type == pygame.KEYUP and e.key == pygame.K_a:
+            d['act'] = {'k': 'a', 'act': 0}
             left = False
-        if e.type == pygame.KEYUP and e.key == pygame.K_d:
+        elif e.type == pygame.KEYUP and e.key == pygame.K_d:
+            d['act'] = {'k': 'd', 'act': 0}
             right = False
-        if e.type == pygame.KEYUP and e.key == pygame.K_w:
+        elif e.type == pygame.KEYUP and e.key == pygame.K_w:
+            d['act'] = {'k': 'w', 'act': 0}
             up = False
-        if e.type == pygame.KEYUP and e.key == pygame.K_s:
+        elif e.type == pygame.KEYUP and e.key == pygame.K_s:
+            d['act'] = {'k': 's', 'act': 0}
             down = False
 
-        if e.type == pygame.KEYUP and e.key == pygame.K_LEFT:
+        elif e.type == pygame.KEYUP and e.key == pygame.K_LEFT:
+            d['act'] = {'k': 'LEFT', 'act': 0}
             left2 = False
-        if e.type == pygame.KEYUP and e.key == pygame.K_RIGHT:
+        elif e.type == pygame.KEYUP and e.key == pygame.K_RIGHT:
+            d['act'] = {'k': 'RIGHT', 'act': 0}
             right2 = False
-        if e.type == pygame.KEYUP and e.key == pygame.K_UP:
+        elif e.type == pygame.KEYUP and e.key == pygame.K_UP:
+            d['act'] = {'k': 'UP', 'act': 0}
             up2 = False
-        if e.type == pygame.KEYUP and e.key == pygame.K_DOWN:
+        elif e.type == pygame.KEYUP and e.key == pygame.K_DOWN:
+            d['act'] = {'k': 'DOWN', 'act': 0}
             down2 = False
+
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_x:
+            savedata(data, 'data')
 
         elif e.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
 
+        else:
+            d['act'] = None
+    print(d)
+    data.append(d)
     car.update(left, right, up, down, asteroids)
     car.draw(screen)
     car2.update(left2, right2, up2, down2, asteroids)
@@ -196,12 +275,15 @@ while True:
         asteroid.draw(screen)
 
     # выведем жизнь на экран белым цветом
-    life = font.render(f'LIFE: {car.life}', False, (0, 255, 255))
-    life = font.render(f'LIFE2: {car2.life}', False, (0, 255, 255))
+    life = font.render(f'RED_LIFE: {car.life}', False, (0, 255, 255))
+    life2 = font.render(f'BLUE_LIFE: {car2.life}', False, (0, 255, 255))
     screen.blit(life, (20, 20))
+    screen.blit(life2, (880, 20))
     if car.dead == True :
         pygame.quit()
+
     elif car2.dead == True:
+        savedata(data, 'data')
         pygame.quit()
 
     pygame.display.update()

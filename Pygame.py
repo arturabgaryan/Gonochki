@@ -7,11 +7,12 @@ from pygame.transform import scale
 pygame.init()
 # фон
 screen = pygame.display.set_mode((1024, 904))
-bg = pygame.image.load('static/img/дорога.jpg')
+bg = pygame.image.load('doroga1.jpg').convert_alpha()
 screen.blit(bg, (0, 0))
+screen.set_alpha(None)
 
 # иконка
-img = pygame.image.load('static/img/car.png')
+img = pygame.image.load('car.png').convert_alpha()
 pygame.display.set_icon(img)
 
 # fps
@@ -19,7 +20,8 @@ clock = pygame.time.Clock()
 pygame.display.update()
 
 # здесь определяются константы, классы и функции
-
+class Coin(pygame.sprite.Sprite):
+     pass
 
 class Explosion(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -28,7 +30,7 @@ class Explosion(pygame.sprite.Sprite):
         self.index = 0
 
         for i in range(8):
-            image = scale(pygame.image.load(f"static/img/tile00{i}.png"), (100, 100))
+            image = scale(pygame.image.load(f"tile00{i}.png"), (100, 100))
             self.images.append(image)
 
     def draw(self, screen):
@@ -38,15 +40,15 @@ class Explosion(pygame.sprite.Sprite):
 
 
 class Bushes(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, speed):
         pygame.sprite.Sprite.__init__(self)
-        img1 = scale(pygame.image.load("static/img/rock.png"), (50, 100))
-        img2 = scale(pygame.image.load("static/img/bush.png"), (50, 100))
-        img3 = scale(pygame.image.load("static/img/box.png"), (50, 100))
+        img1 = scale(pygame.image.load("rock.png"), (50, 100)).convert_alpha()
+        img2 = scale(pygame.image.load("bush.png"), (50, 100)).convert_alpha()
+        img3 = scale(pygame.image.load("box.png"), (50, 100)).convert_alpha()
         imgs = [img1, img2,img3]
         self.image = scale(random.choice(imgs), (50, 50))
         self.rect = pygame.Rect(x, y, 50, 50)
-        self.yvel = 10
+        self.yvel = speed
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
@@ -57,12 +59,12 @@ class Bushes(pygame.sprite.Sprite):
         if self.rect.y > 900:
             self.kill()
 
-
+x = 5
 class Car(pygame.sprite.Sprite):
     def __init__(self, x, y,img):
         pygame.sprite.Sprite.__init__(self)
         self.rect = pygame.Rect(x, y, 50, 100)
-        self.image = scale(pygame.image.load(img), (50, 100))
+        self.image = scale(pygame.image.load(img), (50, 100)).convert_alpha()
         self.xvel = 0
         self.yvel = 0
         self.life = 5
@@ -79,30 +81,14 @@ class Car(pygame.sprite.Sprite):
     def update(self, left, right, up, down, asteroids):
         if left:
             if self.rect.x < 80:
-                if self == car:
-                    self.image = scale(pygame.image.load('static/img/car.png'), (50, 100))
-                else:
-                    self.image = scale(pygame.image.load('static/img/car2.png'), (50, 100))
                 self.xvel = 0
             else:
-                if self == car:
-                    self.image = scale(pygame.image.load('static/img/car_left.png'), (50, 100))
-                else:
-                    self.image = scale(pygame.image.load('static/img/car2_left.png'), (50, 100))
                 self.xvel = -5
 
         if right:
             if self.rect.x > 933:
-                if self == car:
-                    self.image = scale(pygame.image.load('static/img/car.png'), (50, 100))
-                else:
-                    self.image = scale(pygame.image.load('static/img/car2.png'), (50, 100))
                 self.xvel = 0
             else:
-                if self == car:
-                    self.image = scale(pygame.image.load('static/img/car_right.png'), (50, 100))
-                else:
-                    self.image = scale(pygame.image.load('static/img/car2_right.png'), (50, 100))
                 self.xvel = 5
 
         if up:
@@ -119,10 +105,6 @@ class Car(pygame.sprite.Sprite):
 
         if not (left or right or up or down):
             self.xvel = 0
-            if self == car:
-                self.image = scale(pygame.image.load('static/img/car.png'), (50, 100))
-            else:
-                self.image = scale(pygame.image.load('static/img/car2.png'), (50, 100))
             if self.rect.y > 703:
                 self.yvel = 0
             else:
@@ -142,39 +124,11 @@ class Car(pygame.sprite.Sprite):
                 block.kill()
 
 
-car = Car(200, 750, 'static/img/car.png')
-car2 = Car(643, 750, 'static/img/car2.png')
-
+car = Car(200, 750, 'car.png')
+car2 = Car(643, 750, 'car2.png')
+speed = 10
 left = False
 right = False
-<<<<<<< HEAD
-
-left_2 = False
-right_2 = False
-
-car, car2 = Car(380, 800), SecondCar(780, 800)
-
-
-def draw_bg():
-    pass
-
-
-def printout():
-    global pause
-    print(44)
-    pause = False
-
-
-# игровой цикл
-pause = True
-in_game = False
-
-help_menu = pygameMenu.Menu(screen, window_width=1280, window_height=1024, font='static/fonts/Arial.ttf', title='RaceMode', bgfun=draw_bg, color_selected=(255, 255, 255))
-
-help_menu.add_option('Start', pygameMenu.events.CLOSE)
-help_menu.add_option('Exit', pygameMenu.events.EXIT)
-
-=======
 up = False
 down = False
 left2 = False
@@ -187,12 +141,13 @@ pygame.font.init()
 font = pygame.font.SysFont('Comic Sans MS', 30)
 f =0
 f2 = -1024
->>>>>>> 5021293f7fbbbe5f6286138996f5a15b53568093
 while True:
     screen.blit(bg, (0, f))
     screen.blit(bg, (0, f2))
-    f += 7
-    f2 += 7
+    if (car.score%1000 == 0) or (car2.score%1000 == 0):
+        speed += 2
+    f +=  speed
+    f2 +=  speed
     if f > 800:
         f = -1024
     if f2 > 800:
@@ -201,7 +156,7 @@ while True:
     if random.randint(1, 1000) > 970:
         block_x = random.randint(90, 920)
         block_y = -100
-        block = Bushes(block_x, block_y)
+        block = Bushes(block_x, block_y,speed)
         blocks.add(block)
     for e in pygame.event.get():
         if e.type == pygame.KEYDOWN and e.key == pygame.K_a:
@@ -269,15 +224,18 @@ while True:
     life2 = font.render(f'BLUE_LIFE: {car2.life}', False, (0, 255, 255))
     score = font.render(f'RED_SCORE: {car.score}', False, (0, 255, 255))
     score2 = font.render(f'BLUE_SCORE: {car2.score}', False, (0, 255, 255))
-    screen.blit(life, (20, 20))
-    screen.blit(life2, (880, 20))
-    screen.blit(score, (20, 60))
-    screen.blit(score2, (880, 60))
+
     if car.dead and car2.dead:
         screen.blit(score, (400, 200))
         screen.blit(score2, (400, 400))
         pygame.display.update()
         time.sleep(10)
         pygame.quit()
+    else:
+        screen.blit(life, (20, 20))
+        screen.blit(life2, (820, 20))
+        screen.blit(score, (20, 60))
+        screen.blit(score2, (820, 60))
+
 
     pygame.display.update()
