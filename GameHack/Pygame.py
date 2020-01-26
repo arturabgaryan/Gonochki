@@ -84,7 +84,7 @@ game.menu()
 
 pygame.init()
 # background
-gameover = scale(pygame.image.load('Game_over.jpg'),(1280,1024))
+gameover = scale(pygame.image.load('Game_over.jpg'),(1280+100,1024+100))
 screen = pygame.display.set_mode((1280,1024))
 bg =scale(pygame.image.load('doroga1.jpg').convert_alpha(),(1280,1024))
 screen.blit(bg, (0, 0))
@@ -368,16 +368,16 @@ while True:
     score2 = font.render('BLUE_SCORE: {}'.format(car2.score), False, (0, 255, 255))
 
     if car.dead and car2.dead:
-        screen.blit(gameover,(0,0))
+        screen.blit(gameover,(-100,-100))
         if car.score > car2.score:
-            screen.blit(score, (600, 700))
-            screen.blit(score2, (600, 800))
+            screen.blit(score, (500, 800))
+            screen.blit(score2, (500, 900))
         else:
-            screen.blit(score2, (600, 900))
-            screen.blit(score, (600, 800))
+            screen.blit(score2, (500, 900))
+            screen.blit(score, (500, 800))
 
         pygame.display.update()
-        time.sleep(10)
+        time.sleep(5)
         pygame.quit()
     else:
         screen.blit(life, (20, 20))
