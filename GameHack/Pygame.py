@@ -7,7 +7,7 @@ from pygame.transform import scale
 #menu
 pygame.font.init()
 window = pygame.display.set_mode((1280, 1024))
-pygame.display.set_caption('SPIdRACe')
+pygame.display.set_caption('Race Runner 2020')
 menu = pygame.Surface((1280, 1024))
 screen = pygame.Surface((1280, 1024))
 img = pygame.image.load('car.png').convert_alpha()
@@ -74,8 +74,8 @@ class Menu:
             pygame.time.delay(5)
 
 
-punkts = [(450, 200, u'Play', (11, 0, 77), (250, 250, 30), 0, (None, 200)),
-          (450, 400, u'Exit', (11, 0, 77), (250, 250, 30), 1, (None, 200))]
+punkts = [(170, 180, u'Play', (11, 0, 77), (250, 250, 30), 0, ('18347.ttf', 200)),
+          (170, 400, u'Exit', (11, 0, 77), (250, 250, 30), 1, ('18347.ttf', 200))]
 captions = [(70, 50, u'Race Runner 2020', (11, 0, 77), (250, 250, 30), 0, ('18347.ttf',100))]
 game = Menu(captions, punkts)
 game.menu()
@@ -275,7 +275,7 @@ f2 = -1024
 
 # main game
 while True:
-    clock.tick(60)
+    clock.tick(120)
     screen.blit(bg, (0, f))
     screen.blit(bg, (0, f2))
     if (car.score%1000 == 0) or (car2.score%1000 == 0):
@@ -373,8 +373,8 @@ while True:
             screen.blit(score, (600, 700))
             screen.blit(score2, (600, 800))
         else:
-            screen.blit(score2, (600, 800))
-            screen.blit(score, (600, 700))
+            screen.blit(score2, (600, 900))
+            screen.blit(score, (600, 800))
 
         pygame.display.update()
         time.sleep(10)
