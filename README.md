@@ -1,5 +1,11 @@
 # Gonochki
 Гоночки
-Дурак принял ислам
+
 2д гонки
-против бота
+
+# Запуск
+
+```bash
+$ cd GameHack
+$ python3 Pygame.py
+```
