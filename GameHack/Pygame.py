@@ -380,7 +380,7 @@ def main():
                 screen.blit(score, (500, 800))
 
             pygame.display.update()
-            time.sleep(10)
+            time.sleep(5)
             break
             # pygame.quit()
         else:
