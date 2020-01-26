@@ -58,6 +58,11 @@ class Menu:
                     if e.key == pygame.K_DOWN:
                         if punkt < len(self.punkts) - 1:
                             punkt += 1
+                    if e.key == pygame.K_1:
+                        if punkt == 0:
+                            done = False
+                        elif punkt == 1:
+                            exit()
                 if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
                     if punkt == 0:
                         done = False
@@ -71,7 +76,7 @@ class Menu:
 
 punkts = [(450, 200, u'Play', (11, 0, 77), (250, 250, 30), 0, (None, 200)),
           (450, 400, u'Exit', (11, 0, 77), (250, 250, 30), 1, (None, 200))]
-captions = [(360, 100, u'Race Runner 2020', (11, 0, 77), (250, 250, 30), 0, (None,100))]
+captions = [(70, 50, u'Race Runner 2020', (11, 0, 77), (250, 250, 30), 0, ('18347.ttf',100))]
 game = Menu(captions, punkts)
 game.menu()
 #-----------------------------------------------------------------------------------------------------------------------
