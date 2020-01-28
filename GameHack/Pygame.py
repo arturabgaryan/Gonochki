@@ -109,6 +109,8 @@ def main():
     #soundtrack
     pygame.mixer.music.load('music.wav')
     pygame.mixer.music.play(-1)
+    sound = pygame.mixer.Sound('gameover.wav')
+
 
     # constants classes and functions
     class Coins(pygame.sprite.Sprite):
@@ -371,7 +373,9 @@ def main():
         score2 = font.render('BLUE_SCORE: {}'.format(car2.score), False, (0, 255, 255))
 
         if car.dead and car2.dead:
+            pygame.mixer.music.stop()
             screen.blit(gameover,(-100,-100))
+            sound.play()
             if car.score > car2.score:
                 screen.blit(score, (500, 800))
                 screen.blit(score2, (500, 900))
